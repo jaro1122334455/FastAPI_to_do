@@ -2,6 +2,7 @@ from typing import Union
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from enum import Enum
 
 
 app = FastAPI()
@@ -16,6 +17,11 @@ class Task(BaseModel):
     title: str = "Add title"
     description: str = None
     is_done: bool = False
+
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
 
 task_1 = Task()
 
@@ -41,3 +47,15 @@ def read_item(item_id: int, q: Union[str, None] = None):
 def update_item(item_id: int, item: Item = None):
     return {"test"}
     return {"item_name": item.name, "item_id": item_id}
+
+
+
+@app.get("/models/{model_name}")
+async def get_model(model_name: ModelName):
+    if model_name is ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learning FTW!"}
+
+    if model_name.value == "lenet":
+        return {"model_name": model_name, "message": "LeCNN all the images"}
+
+    return {"model_name": model_name, "message": "Have some residuals"}
