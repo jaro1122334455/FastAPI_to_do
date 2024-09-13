@@ -22,6 +22,7 @@ class Task(BaseModel):
 
 fake_tasks_db = []
 
+test_var = 10
 
 @app.get("/")
 def read_root():
