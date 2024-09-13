@@ -90,3 +90,11 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+    
+      # Zapisz wyniki analizy jako artefakt
+    - name: Upload CodeQL database ZIP as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: codeql-database
+        path: /home/runner/work/_temp/codeql_databases/python.zip
