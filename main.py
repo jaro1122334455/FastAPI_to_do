@@ -1,11 +1,14 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query, Request
 from pydantic import BaseModel
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from enum import Enum
 
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 class Item(BaseModel):
     name: str
@@ -25,8 +28,8 @@ fake_tasks_db = []
 test_var = 10
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/tasks/{task_id}")

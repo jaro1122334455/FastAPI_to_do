@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+        <h1>TO DO List</h1>  
+    </main>
+    <form id="task-form">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" placeholder="Add task title"><br>
+        <label for="desciption">Description:</label><br>
+        <input type="text" id="description" name="description" placeholder="Add task description (optional)"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        document.getElementById('task-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Zapobiega domyślnej akcji formularza
+            
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            
+            const response = await fetch('/tasks/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description })
+            });
+            
+            const result = await response.json();
+            alert(result.msg); // Wyświetla komunikat o sukcesie
+        });
+    </script>
+
+      
+    <script src="index.js"></script>
+  </body>
+</html>
