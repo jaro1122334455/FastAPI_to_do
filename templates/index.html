@@ -34,10 +34,24 @@
                 body: JSON.stringify({ title, description })
             });
             
-            const result = await response.json();
-            alert(result.msg); // Wyświetla komunikat o sukcesie
+            // const result = await response.json();
+            // Jeżeli odpowiedź zawiera nagłówek 'Location', to jest przekierowanie
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                const result = await response.json();
+                alert(result.msg); // Wyświetla komunikat o sukcesie
+            }
         });
     </script>
+
+
+    <h2>Lista zadań:</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }}</li>
+        {% endfor %}
+    </ul>
 
       
     <script src="index.js"></script>

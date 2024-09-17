@@ -2,10 +2,12 @@ from typing import Union
 
 from fastapi import FastAPI, Query, Request
 from pydantic import BaseModel
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from enum import Enum
 
+fake_tasks_db = []
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -23,27 +25,35 @@ class Task(BaseModel):
     is_done: bool = False
 
 
-fake_tasks_db = []
+
 
 test_var = 10
 
 @app.get("/")
-def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "tasks": fake_tasks_db})
+    # return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/tasks/{task_id}")
-def get_task(task_id: int):
+async def get_task(task_id: int):
     try:
         return {"task_id": task_id, "title": fake_tasks_db[task_id].title, "description": fake_tasks_db[task_id].description, "is_done": fake_tasks_db[task_id].is_done}
     except:
         return {"msg": "task doesn't exist yet"}
 
+# @app.get("/tasks/")
+# async def get_t(request: Request):
+#     return {"message": "You are on the main page"}
+#     return templates.TemplateResponse("index2.html", {"request": request, "tasks": fake_tasks_db})
+
 
 @app.post("/tasks/")
 async def create_task(task: Task):
     fake_tasks_db.append(task)
-    return{"msg": "task added succesfully"}
+    return RedirectResponse(url="/", status_code=303) 
+    # return templates.TemplateResponse("index.html", {"request": request, "tasks": fake_tasks_db})
+    # return{"msg": "task added succesfully"}
 
 
 @app.put("/tasks/{task_id}")
