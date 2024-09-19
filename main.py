@@ -12,6 +12,9 @@ fake_tasks_db = []
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
+# Montujemy folder 'static', aby serwować pliki statyczne
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 class Item(BaseModel):
     name: str
     description: str | None = None
@@ -32,7 +35,6 @@ test_var = 10
 @app.get("/")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "tasks": fake_tasks_db})
-    # return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/tasks/{task_id}")
@@ -42,18 +44,11 @@ async def get_task(task_id: int):
     except:
         return {"msg": "task doesn't exist yet"}
 
-# @app.get("/tasks/")
-# async def get_t(request: Request):
-#     return {"message": "You are on the main page"}
-#     return templates.TemplateResponse("index2.html", {"request": request, "tasks": fake_tasks_db})
-
 
 @app.post("/tasks/")
 async def create_task(task: Task):
     fake_tasks_db.append(task)
     return RedirectResponse(url="/", status_code=303) 
-    # return templates.TemplateResponse("index.html", {"request": request, "tasks": fake_tasks_db})
-    # return{"msg": "task added succesfully"}
 
 
 @app.put("/tasks/{task_id}")
@@ -73,52 +68,8 @@ def main():
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
+
 if __name__ == "__main__":
     main()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.post("/items/")
-# async def create_item(item: Item):
-#     item_dict = item.dict()
-#     if item.tax:
-#         price_with_tax = item.price + item.tax
-#         item_dict.update({"price_with_tax": price_with_tax})
-#     return item_dict
-
-
-# @app.get("/items/{item_id}")
-# def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id, "q": q}
-
-
-# @app.put("/items/{item_id}")
-# def update_item(item_id: int, item: Item = None):
-#     return {"test"}
-#     return {"item_name": item.name, "item_id": item_id}
-
-
-
-# @app.get("/models/{model_name}")
-# async def get_model(model_name: ModelName):
-#     if model_name is ModelName.alexnet:
-#         return {"model_name": model_name, "message": "Deep Learning FTW!"}
-
-#     if model_name.value == "lenet":
-#         return {"model_name": model_name, "message": "LeCNN all the images"}
-
-#     return {"model_name": model_name, "message": "Have some residuals"}

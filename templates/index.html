@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
   </head>
   <body>
     <main>
@@ -19,41 +19,26 @@
         <input type="text" id="description" name="description" placeholder="Add task description (optional)"><br><br>
         <input type="submit" value="Submit">
     </form>
-    <script>
-        document.getElementById('task-form').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Zapobiega domyślnej akcji formularza
-            
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
-            
-            const response = await fetch('/tasks/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title, description })
-            });
-            
-            // const result = await response.json();
-            // Jeżeli odpowiedź zawiera nagłówek 'Location', to jest przekierowanie
-            if (response.redirected) {
-                window.location.href = response.url;
-            } else {
-                const result = await response.json();
-                alert(result.msg); // Wyświetla komunikat o sukcesie
-            }
-        });
-    </script>
+
+
+    <script src="static/index.js"></script>
 
 
     <h2>Lista zadań:</h2>
-    <ul>
+    <dl>
         {% for task in tasks %}
-            <li>{{ task.title }}</li>
+            <!-- <dt>{{ task.title }}</dt>
+            <dd>{{ task.title }}</dd> -->
+            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+            <label for="vehicle1">{{ task.title }}</label><br>
+            <label for="vehicle1">{{ task.description }}</label><br>
         {% endfor %}
-    </ul>
+    </dl>
+
+
+
 
       
-    <script src="index.js"></script>
+    
   </body>
 </html>
