@@ -25,15 +25,15 @@
 
 
     <h2>Lista zadań:</h2>
-    <dl>
         {% for task in tasks %}
-            <!-- <dt>{{ task.title }}</dt>
-            <dd>{{ task.title }}</dd> -->
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+            <!-- {% if task.is_done %}
+            <h1>Hello!</h1>
+            {% endif %} -->
+            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" {% if task.is_done %} checked {% endif %}>
             <label for="vehicle1">{{ task.title }}</label><br>
             <label for="vehicle1">{{ task.description }}</label><br>
         {% endfor %}
-    </dl>
+
 
 
 
